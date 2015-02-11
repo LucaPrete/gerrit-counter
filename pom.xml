@@ -18,15 +18,15 @@ limitations under the License.
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>com.googlesource.gerrit.plugins.testplugin</groupId>
-  <artifactId>testplugin</artifactId>
+  <groupId>com.googlesource.gerrit.plugins.gerritclonescounter</groupId>
+  <artifactId>gerritclonescounter</artifactId>
   <packaging>jar</packaging>
   <version>1.0-SNAPSHOT</version>
-  <name>countclones</name>
+  <name>gerritclonescounter</name>
 
   <properties>
     <Gerrit-ApiType>plugin</Gerrit-ApiType>
-    <Gerrit-ApiVersion>2.9.3</Gerrit-ApiVersion>
+    <Gerrit-ApiVersion>2.9</Gerrit-ApiVersion>
   </properties>
 
   <build>
@@ -40,9 +40,7 @@ limitations under the License.
           <archive>
             <manifestEntries>
               <Gerrit-PluginName>countclones</Gerrit-PluginName>
-              <Gerrit-Module>com.googlesource.gerrit.plugins.testplugin.Module</Gerrit-Module>
-              <Gerrit-SshModule>com.googlesource.gerrit.plugins.testplugin.SshModule</Gerrit-SshModule>
-              <Gerrit-HttpModule>com.googlesource.gerrit.plugins.testplugin.HttpModule</Gerrit-HttpModule>
+              <Gerrit-Module>com.googlesource.gerrit.plugins.hooks.clonescounter.ClonesCounterModule</Gerrit-Module>
 
               <Implementation-Vendor>Gerrit Code Review</Implementation-Vendor>
               <Implementation-URL>http://code.google.com/p/gerrit/</Implementation-URL>
@@ -81,12 +79,6 @@ limitations under the License.
     	<groupId>org.postgresql</groupId>
     	<artifactId>postgresql</artifactId>
     	<version>9.3-1103-jdbc41</version>
-    </dependency>
-    <dependency>
-    	<groupId>org.apache.maven.plugins</groupId>
-    	<artifactId>maven-resources-plugin</artifactId>
-    	<version>2.7</version>
-    	<type>maven-plugin</type>
     </dependency>
   </dependencies>
 </project>
