@@ -18,7 +18,6 @@ import java.util.Collection;
  * </p>
  */
 public class CloneCounterHook implements PreUploadHook {
-
     private static final Logger log = LoggerFactory.getLogger(CloneCounterHook.class);
 
     @Override
@@ -53,9 +52,4 @@ public class CloneCounterHook implements PreUploadHook {
         // TODO
         //db.incrementClonesCounter();
     }
-
-    public interface Factory {
-        CloneCounterHook create();
-    }
-
 }

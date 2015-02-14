@@ -1,13 +1,12 @@
 package com.googlesource.gerrit.plugins.clonecounter;
 
-import org.eclipse.jgit.lib.Config;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.google.gerrit.extensions.annotations.PluginName;
 import com.google.gerrit.pgm.init.AllProjectsConfig;
 import com.google.gerrit.pgm.init.InitStep;
 import com.google.gerrit.pgm.util.ConsoleUI;
+import org.eclipse.jgit.lib.Config;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This is mostly sample code. We are not using it, and it is not enabled.
@@ -17,13 +16,14 @@ import com.google.gerrit.pgm.util.ConsoleUI;
  * </p>
  */
 public class InitClonesCounter implements InitStep {
+    private static final Logger log = LoggerFactory.getLogger(InitClonesCounter.class);
+
     private final String pluginName;
     private final ConsoleUI ui;
     private final AllProjectsConfig allProjectsConfig;
 
-    private static final Logger log = LoggerFactory.getLogger(InitClonesCounter.class);
-
-    public InitClonesCounter(@PluginName String pluginName, ConsoleUI ui,
+    public InitClonesCounter(@PluginName String pluginName,
+                             ConsoleUI ui,
                              AllProjectsConfig allProjectsConfig) {
         this.pluginName = pluginName;
         this.ui = ui;

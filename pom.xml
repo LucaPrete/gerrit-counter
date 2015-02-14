@@ -39,7 +39,7 @@ limitations under the License.
           <archive>
             <manifestEntries>
               <Gerrit-PluginName>clone-counter</Gerrit-PluginName>
-              <Gerrit-Module>com.googlesource.gerrit.plugins.clonecounter.ClonesCounterModule</Gerrit-Module>
+              <Gerrit-Module>com.googlesource.gerrit.plugins.clonecounter.CloneCounterModule</Gerrit-Module>
               <!-- Init step is for the init wizard when you install/update gerrit... we don't need it for now -->
               <!-- Gerrit-InitStep>com.googlesource.gerrit.plugins.clonecounter.InitClonesCounter</Gerrit-InitStep -->
 
