@@ -1,4 +1,4 @@
-package com.googlesource.gerrit.plugins.hooks.clonescounter;
+package com.googlesource.gerrit.plugins.clonecounter;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
