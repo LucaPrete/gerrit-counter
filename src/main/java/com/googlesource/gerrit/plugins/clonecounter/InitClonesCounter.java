@@ -38,7 +38,7 @@ public class InitClonesCounter implements InitStep {
     public void postRun() throws Exception {
         //FIXME
         ui.message("\n");
-        ui.header(pluginName + " Integration");
+        ui.header(pluginName);
         boolean enabled = ui.yesno(true, "By default enabled for all projects");
         Config cfg = allProjectsConfig.load();
         log.info(cfg.toString());
@@ -47,6 +47,6 @@ public class InitClonesCounter implements InitStep {
         } else {
             cfg.unset("plugin", pluginName, "enabled");
         }
-        allProjectsConfig.save(pluginName, "Initialize " + pluginName + " Integration");
+        allProjectsConfig.save(pluginName, "Initializing " + pluginName);
     }
 }
