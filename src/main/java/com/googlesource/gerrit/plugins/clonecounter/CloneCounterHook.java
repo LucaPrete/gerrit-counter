@@ -28,22 +28,22 @@ public class CloneCounterHook implements PreUploadHook {
 	private final DBConnection db;
 	private final PluginConfig pluginConfig;
 	
-	public CloneCounterHook(PluginConfig config){
-		this.pluginConfig = config;
-		this.activeRepos = new ArrayList<String>(Arrays
-				.asList(pluginConfig.getString("activeRepos", "default-repo").split(",")));
-    	HashMap<String, String> dbConfig = new HashMap<String, String>();
-    	dbConfig.put("dbUrl", pluginConfig.getString("dbUrl", "127.0.0.1"));
-    	dbConfig.put("dbPort", pluginConfig.getString("dbPort", "5432"));
-    	dbConfig.put("dbUser", pluginConfig.getString("dbUser", "admin"));
-    	dbConfig.put("dbPass", pluginConfig.getString("dbPass", "pass"));
-    	dbConfig.put("dbName", pluginConfig.getString("dbName", "default-db"));
-    	dbConfig.put("dbTable", pluginConfig.getString("dbTable", "default-table"));
-    	dbConfig.put("dbDateCol", pluginConfig.getString("dbDateCol", "date"));
-    	dbConfig.put("dbCounterCol", pluginConfig.getString("dbCounterCol", "clones"));
-    	dbConfig.put("dbRepoCol", pluginConfig.getString("dbRepoCol", "repos"));
-		this.db = new DBConnection(dbConfig);
-	}
+    public CloneCounterHook(PluginConfig config){
+	    this.pluginConfig = config;
+	    this.activeRepos = new ArrayList<String>(Arrays
+				.asList(pluginConfig.getString("activeRepos", "").split(",")));
+        HashMap<String, String> dbConfig = new HashMap<String, String>();
+        dbConfig.put("dbUrl", pluginConfig.getString("dbUrl", "127.0.0.1"));
+        dbConfig.put("dbPort", pluginConfig.getString("dbPort", "5432"));
+        dbConfig.put("dbUser", pluginConfig.getString("dbUser", "admin"));
+        dbConfig.put("dbPass", pluginConfig.getString("dbPass", "pass"));
+        dbConfig.put("dbName", pluginConfig.getString("dbName", "default-db"));
+        dbConfig.put("dbTable", pluginConfig.getString("dbTable", "default-table"));
+        dbConfig.put("dbDateCol", pluginConfig.getString("dbDateCol", "date"));
+        dbConfig.put("dbCounterCol", pluginConfig.getString("dbCounterCol", "clones"));
+        dbConfig.put("dbRepoCol", pluginConfig.getString("dbRepoCol", "repos"));
+	    this.db = new DBConnection(dbConfig);
+    }
 	
     @Override
     public void onBeginNegotiateRound(UploadPack uploadPack,
@@ -70,7 +70,12 @@ public class CloneCounterHook implements PreUploadHook {
         		.split("\\.")[0];
         if (haves == null || haves.isEmpty()) {
             log.debug("Repository {} cloned.", repoName);
-            if(activeRepos.contains(repoName)) {
+            if(activeRepos != null && activeRepos.size()>0 && !activeRepos.get(0).equals("")) {
+	            if(activeRepos.contains(repoName)) {
+	            	log.debug("{} is a repository to be tracked. Incrementing counter in DB.", repoName);
+	            	incrementCount(repoName);
+	            }
+            } else {
             	log.debug("{} is a repository to be tracked. Incrementing counter in DB.", repoName);
             	incrementCount(repoName);
             }

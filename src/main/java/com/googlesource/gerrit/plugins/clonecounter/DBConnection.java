@@ -64,13 +64,13 @@ public class DBConnection {
                 updateRecord.setInt(1, recordClonesCount + 1);
                 updateRecord.setDate(2, recordDate);
                 updateRecord.setString(3, recordRepo);
-                rs = updateRecord.executeQuery();
+                updateRecord.execute();
             }else{
             	insertRecord = con.prepareStatement(queryInsertRecord);
                 insertRecord.setDate(1, getTodayDate());
                 insertRecord.setInt(2, 1);
                 insertRecord.setString(3, repo);
-                rs = insertRecord.executeQuery();
+                insertRecord.execute();
             }
         } catch (SQLException ex) {
             log.error(ex.getMessage());
