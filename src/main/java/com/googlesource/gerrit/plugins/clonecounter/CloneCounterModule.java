@@ -21,7 +21,7 @@ public class CloneCounterModule extends FactoryModule {
     private static final Logger log = LoggerFactory.getLogger(CloneCounterModule.class);
 
     private final String pluginName;
-    
+
     @Inject
     private final PluginConfigFactory pluginCfgFactory;
 

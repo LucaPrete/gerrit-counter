@@ -23,10 +23,10 @@ import com.google.gerrit.server.config.PluginConfig;
  */
 public class CloneCounterHook implements PreUploadHook {
     
-	private static final Logger log = LoggerFactory.getLogger(CloneCounterHook.class);
-	private final ArrayList<String> activeRepos;
-	private final DBConnection db;
-	private final PluginConfig pluginConfig;
+    private static final Logger log = LoggerFactory.getLogger(CloneCounterHook.class);
+    private final ArrayList<String> activeRepos;
+    private final DBConnection db;
+    private final PluginConfig pluginConfig;
 	
     public CloneCounterHook(PluginConfig config){
 	    this.pluginConfig = config;
@@ -72,9 +72,9 @@ public class CloneCounterHook implements PreUploadHook {
             log.debug("Repository {} cloned.", repoName);
             if(activeRepos != null && activeRepos.size()>0 && !activeRepos.get(0).equals("")) {
 	            if(activeRepos.contains(repoName)) {
-	            	log.debug("{} is a repository to be tracked. Incrementing counter in DB.", repoName);
-	            	incrementCount(repoName);
-	            }
+                	log.debug("{} is a repository to be tracked. Incrementing counter in DB.", repoName);
+                	incrementCount(repoName);
+                }
             } else {
             	log.debug("{} is a repository to be tracked. Incrementing counter in DB.", repoName);
             	incrementCount(repoName);
