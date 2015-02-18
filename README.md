@@ -1,4 +1,4 @@
-Gerrit clone-counter plugin configuration
+Clone-counter Gerrit plugin
 =========================================
 
 Description
@@ -7,6 +7,10 @@ The plugin allows to track the number of clones for one or more Gerrit repositor
 
 The user can activate the plugin either for all the Gerrit repositories or for just for few of them.
 The user can also choose custom DB name and table structures.
+
+Supported Gerrit versions
+-------------------------
+- 2.10
 
 Database requirements
 ---------------------
