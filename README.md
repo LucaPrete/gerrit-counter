@@ -89,9 +89,9 @@ Following parameters must be inserted below the specific plugin section in the `
 
 - Repository field name. Name of the column used in the SQL table to keep track of the repository name. For example,
 
-```
-dbRepoCol = repo
-```
+  ```
+  dbRepoCol = repo
+  ```
 
 Configuration example
 ---------------------
