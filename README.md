@@ -10,7 +10,7 @@ The user can also choose custom DB name and table structures.
 
 Supported Gerrit versions
 -------------------------
-- 2.10
+- Gerrit 2.10 (https://code.google.com/p/gerrit/)
 
 Database requirements
 ---------------------
