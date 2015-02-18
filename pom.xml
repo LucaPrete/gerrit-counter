@@ -21,7 +21,7 @@ limitations under the License.
   <groupId>com.googlesource.gerrit.plugins.clone-counter</groupId>
   <artifactId>clone-counter</artifactId>
   <packaging>jar</packaging>
-  <version>v2.10-SNAPSHOT</version>
+  <version>v2.10</version>
   <name>clone-counter</name>
 
   <properties>
@@ -40,10 +40,8 @@ limitations under the License.
             <manifestEntries>
               <Gerrit-PluginName>clone-counter</Gerrit-PluginName>
               <Gerrit-Module>com.googlesource.gerrit.plugins.clonecounter.CloneCounterModule</Gerrit-Module>
-              <!-- Init step is for the init wizard when you install/update gerrit... we don't need it for now -->
-              <!-- Gerrit-InitStep>com.googlesource.gerrit.plugins.clonecounter.InitClonesCounter</Gerrit-InitStep -->
 
-              <Implementation-Vendor>LucaPrete and bocon</Implementation-Vendor>
+              <Implementation-Vendor>LucaPrete and Brian O'Connor</Implementation-Vendor>
               <Implementation-URL>https://github.com/LucaPrete/gerritclonescounter</Implementation-URL>
 
               <Implementation-Title>${Gerrit-ApiType} ${project.artifactId}</Implementation-Title>
