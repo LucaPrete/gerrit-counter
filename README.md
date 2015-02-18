@@ -21,8 +21,8 @@ The second column is used to track the number of clones for a specific repositor
 The third column is used to keep track the name of the repository cloned and it must be of type `varchar`.
 It's strongly suggested to use as the primary key the date and the repository fields.
 
-Configuration
--------------
+Plugin configuration
+--------------------
 In order to configure the plugin, the user should create a dedicated subsection in the `gerrit.config` configuration file.
 Each time the configuration is modified, either Gerrit need to be restarted or the plugin must be reloaded in order for it
 to parse the new configuration.
