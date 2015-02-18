@@ -10,7 +10,7 @@ The user can also choose custom DB name and table structures.
 
 Supported Gerrit versions
 -------------------------
-- 2.10
+- Gerrit 2.10 (https://code.google.com/p/gerrit/)
 
 Database requirements
 ---------------------
@@ -21,8 +21,8 @@ The second column is used to track the number of clones for a specific repositor
 The third column is used to keep track the name of the repository cloned and it must be of type `varchar`.
 It's strongly suggested to use as the primary key the date and the repository fields.
 
-Configuration
--------------
+Plugin configuration
+--------------------
 In order to configure the plugin, the user should create a dedicated subsection in the `gerrit.config` configuration file.
 Each time the configuration is modified, either Gerrit need to be restarted or the plugin must be reloaded in order for it
 to parse the new configuration.
@@ -35,60 +35,63 @@ To start the plugin configuration block create a line in `gerrit.config` like th
 
 Following parameters must be inserted below the specific plugin section in the `gerrit.config`.
 
-Active Repos. The user can specifiy a list of repository to be tracked. If no repositories are specified, by default all the
-repositories will be tracked. Please, provide a comma separated value of repository names. For example,
+- **Active Repos.**
+  The user can specifiy a list of repository to be tracked. If no repositories are specified, by default all the repositories will be tracked. Please, provide a comma separated value of repository names. For example,
 
-```
-activeRepos = repoOne,repoTwo,repoThree
-```
+  ```
+  activeRepos = repoOne,repoTwo,repoThree
+  ```
 
-Database address:
+- **Database address:**
 
-```
-dbUrl = db.example.com
-```
+  ```
+  dbUrl = db.example.com
+  ```
 
-Database port:
+- **Database port:**
 
-```
-dbPort = 5432
-```
+  ```
+  dbPort = 5432
+  ```
 
-Database user:
+- **Database user:**
 
-```
-dbUser = admin
-```
+  ```
+  dbUser = admin
+  ```
 
-Database password.
+- **Database password.**
 
-```
-dbPass = pass
-```
+  ```
+  dbPass = pass
+  ```
 
-Application table. The table used in SQL by the application. For example,
+- **Application table.**
+  The table used in SQL by the application. For example,
 
-```
-dbTable = my-db-table
-```
+  ```
+  dbTable = my-db-table
+  ```
 
-Date field name. Name of the column used in the SQL table to keep track of the dates. For example,
+- **Date field name.**
+  Name of the column used in the SQL table to keep track of the dates. For example,
 
-```
-dbDateCol = date
-```
+  ```
+  dbDateCol = date
+  ```
 
-Counter field name. Name of the column used in the SQL table to keep track of the number of clones. For example,
+- **Counter field name.**
+  Name of the column used in the SQL table to keep track of the number of clones. For example,
 
-```
-dbCounterCol = clones
-```
+  ```
+  dbCounterCol = clones
+  ```
 
-Repository field name. Name of the column used in the SQL table to keep track of the repository name. For example,
+- Repository field name. Name of the column used in the SQL table to keep track of the repository name. For example,
 
-```
-dbRepoCol = repo
-```
+  ```
+  dbRepoCol = repo
+  ```
 
 Configuration example
 ---------------------
