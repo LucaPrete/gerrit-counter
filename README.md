@@ -1,5 +1,5 @@
-@PLUGIN@ plugin configuration
-=============================
+Gerrit clone-counter plugin configuration
+=========================================
 
 Description
 -----------
