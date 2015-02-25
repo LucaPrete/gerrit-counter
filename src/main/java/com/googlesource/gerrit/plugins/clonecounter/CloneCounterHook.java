@@ -45,10 +45,6 @@ public class CloneCounterHook implements PreUploadHook {
 	
   public CloneCounterHook(PluginConfig config) {
     this.pluginConfig = config;
-    this.activeRepos = new ArrayList<String>(Arrays
-        .asList(pluginConfig.getString("activeRepos", "").split(",")));
-    this.activeTrackers = new ArrayList<String>(Arrays
-        .asList(pluginConfig.getString("activeTrackers", "").split(",")));
     HashMap<String, String> dbConfig = new HashMap<String, String>();
     dbConfig.put("dbUrl", pluginConfig.getString("dbUrl", "127.0.0.1"));
     dbConfig.put("dbPort", pluginConfig.getString("dbPort", "5432"));
@@ -57,10 +53,18 @@ public class CloneCounterHook implements PreUploadHook {
     dbConfig.put("dbName", pluginConfig.getString("dbName", "default-db"));
     dbConfig.put("dbTable", pluginConfig.getString("dbTable", "default-table"));
     dbConfig.put("dbDateCol", pluginConfig.getString("dbDateCol", "date"));
-    dbConfig.put("dbClonesCounterCol", pluginConfig.getString("dbClonesCounterCol", null));
-    dbConfig.put("dbUpdatesCounterCol", pluginConfig.getString("dbUpdatesCounterCol", null));
+    dbConfig.put("dbClonesCounterCol", pluginConfig
+        .getString("dbClonesCounterCol", null));
+    dbConfig.put("dbUpdatesCounterCol", pluginConfig
+        .getString("dbUpdatesCounterCol", null));
     dbConfig.put("dbRepoCol", pluginConfig.getString("dbRepoCol", "repos"));
     this.db = new DBConnection(dbConfig);
+    
+    this.activeRepos = new ArrayList<String>(Arrays
+        .asList(pluginConfig.getString("activeRepos", "").split(",")));
+    
+    this.activeTrackers = new ArrayList<String>(Arrays
+        .asList(pluginConfig.getString("activeTrackers", "").split(",")));
   }
 	
   @Override
@@ -77,38 +81,70 @@ public class CloneCounterHook implements PreUploadHook {
           throws ServiceMayNotContinueException {
     // nothing to do
   }
-
+  
   @Override
   public void onSendPack(UploadPack uploadPack,
-      Collection<? extends ObjectId> collection, Collection<? extends ObjectId> haves)
+      Collection<? extends ObjectId> collection,
+      Collection<? extends ObjectId> haves)
           throws ServiceMayNotContinueException {
+    ArrayList<String> actionsTracked = getActionsList();
+    ArrayList<String> repoTracked = getTrackedRepoList();
+    String requiredAction = cloneOrUpdate(haves);
+    String requiredRepoName = getRepoName(uploadPack);
+    log.debug("Client requires a {} on repository {}.", requiredAction,
+        requiredRepoName);
+    if (actionsTracked != null && actionsTracked.contains(requiredAction)) {
+      log.debug("Configuration requires to track the action {} just received +"
+          + "for repository {}.", requiredAction, requiredRepoName);
+      if (repoTracked != null && repoTracked.contains(requiredRepoName)) {
+        db.incrementCounters(requiredAction, requiredRepoName);
+      } else if (repoTracked == null) {
+        db.incrementCounters(requiredAction, requiredRepoName);
+      }
+    }
+  }
+  
+  /* Returns the request type checking what the client has.
+   * If the client has nothing in the request, it's cloning.
+   * Otherwise the client is fetching or pulling
+  */
+  private String cloneOrUpdate(Collection<? extends ObjectId> haves) {
+    if (haves == null || haves.isEmpty()) return "clone";
+    else return "update";
+  }
+  
+  /*
+   * Returns the repository name from uploadPack
+   */
+  private String getRepoName(UploadPack uploadPack) {
     String[] repoPathSplitted = uploadPack.getRepository()
         .toString().split("/");
     String repoName = repoPathSplitted[repoPathSplitted.length-1]
         .split("\\.")[0].toLowerCase();
-    if (haves == null || haves.isEmpty()) {
-      log.debug("Repository {} cloned.", repoName);
-            if (activeRepos != null && activeRepos.size()>0
-                && !activeRepos.get(0).equals("")) {
-              if (activeRepos.contains(repoName) && activeTrackers.contains("clones")) {
-                log.debug("{} is a repository to be tracked. Incrementing clones counter in DB.", repoName);
-                db.incrementCounters("clones", repoName);
-              }
-            } else {
-              log.debug("{} is a repository to be tracked. Incrementing clones counter in DB.", repoName);
-              db.incrementCounters("clones", repoName);
-            }
-    } else {
-      if (activeRepos != null && activeRepos.size()>0
-          && !activeRepos.get(0).equals("")) {
-        if (activeRepos.contains(repoName) && activeTrackers.contains("updates")) {
-          log.debug("{} is a repository to be tracked. Incrementing updates counter in DB.", repoName);
-          db.incrementCounters("updates", repoName);
-        } else {
-          log.debug("{} is a repository to be tracked. Incrementing updates counter in DB.", repoName);
-          db.incrementCounters("updates", repoName);
-        }
-      }
+    return repoName;
+  }
+  
+  /* Returns the list of repositories to be tracked if the user
+   * specified specific repositories. It returns null if no
+   * repositories have been set. 
+   */
+  private ArrayList<String> getTrackedRepoList() {
+    if (activeRepos != null && activeRepos.size()>0
+        && !activeRepos.get(0).equals("")) {
+      return activeRepos;
     }
+    return null;
+  }
+  
+  /*
+   *  Returns the list of objects that the user want to be tracked (clones, updates).
+   *  Returns null if no objects to be tracked are specified.
+   */
+  private ArrayList<String> getActionsList() {
+    if (activeTrackers != null && activeTrackers.size()>0
+        && !activeTrackers.get(0).equals("")) {
+      return activeTrackers;
+    }
+    return null;
   }
 }

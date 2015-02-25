@@ -52,7 +52,7 @@ public class DBConnection {
     this.repoCol = dbConfig.get("dbRepoCol");
   }
 
-  // Increment the clones counter given a certain db and a certain table
+  // Increment the either the clones or the update counters, given an update type and a repo name
   public void incrementCounters(String type, String repo){
     Connection con = null;
     PreparedStatement recordExists = null;
