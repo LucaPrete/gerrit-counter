@@ -7,4 +7,12 @@ public class ClientAction {
     UPDATE
   }
   
+  public static ClientAction.Type getActionTypeFromString(String activeTracker) {
+    for (Type t : Type.values()) {
+      if (t.toString().equalsIgnoreCase(activeTracker)) {
+        return t;
+      }
+    }
+    return null;
+  }
 }
