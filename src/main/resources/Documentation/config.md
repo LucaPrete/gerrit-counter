@@ -31,8 +31,20 @@ To start the plugin configuration block create a line in `gerrit.config` like th
 
 Following parameters must be inserted below the specific plugin section in the `gerrit.config`.
 
+- **Active Trackers.**
+  The parameter is mandatory. It allow you to specify what behavior a user want to monitor.
+  It's a comma separated values list. For example, if you want to monitor the number of
+  clones repositories specify clone, if you want to monitor also the number of fetches and pulls
+  specify update. You can also specify both, as in the example below.
+
+```
+activeTrackers = clone,update
+```
+
 - **Active Repos.**
-  The user can specifiy a list of repository to be tracked. If no repositories are specified, by default all the repositories will be tracked. Please, provide a comma separated value of repository names. For example,
+  The user can specifiy a list of repository to be tracked. If no repositories are specified,
+  by default all the repositories will be tracked. Please, provide a comma separated value of
+  repository names. For example,
 
 ```
 activeRepos = repoOne,repoTwo,repoThree
@@ -76,11 +88,19 @@ dbTable = my-db-table
 dbDateCol = date
 ```
 
-- **Counter field name.**
+- **Clones Counter DB column name.**
   Name of the column used in the SQL table to keep track of the number of clones. For example,
 
 ```
-dbCounterCol = clones
+dbClonesCounterCol = clones
+```
+
+- **Updates Counter DB column name.**
+  Name of the column used in the SQL table to keep track of the number of updates.
+  (fetches and pulls). For example,
+
+```
+dbUpdatesCounterCol = updates
 ```
 
 - **Repository field name.**
