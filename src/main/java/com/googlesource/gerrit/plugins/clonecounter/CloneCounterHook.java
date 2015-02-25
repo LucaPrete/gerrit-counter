@@ -27,6 +27,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gerrit.server.config.PluginConfig;
+import com.googlesource.gerrit.plugins.clonecounter.ClientAction.Type;
 
 /**
  * CloneCounterHook is a PreUploadHook that is called before the server
@@ -89,7 +90,7 @@ public class CloneCounterHook implements PreUploadHook {
           throws ServiceMayNotContinueException {
     ArrayList<String> actionsTracked = getActionsList();
     ArrayList<String> repoTracked = getTrackedRepoList();
-    String requiredAction = cloneOrUpdate(haves);
+    ClientAction.Type requiredAction = cloneOrUpdate(haves);
     String requiredRepoName = getRepoName(uploadPack);
     log.debug("Client requires a {} on repository {}.", requiredAction,
         requiredRepoName);
@@ -108,9 +109,9 @@ public class CloneCounterHook implements PreUploadHook {
    * If the client has nothing in the request, it's cloning.
    * Otherwise the client is fetching or pulling
   */
-  private String cloneOrUpdate(Collection<? extends ObjectId> haves) {
-    if (haves == null || haves.isEmpty()) return "clone";
-    else return "update";
+  private ClientAction.Type cloneOrUpdate(Collection<? extends ObjectId> haves) {
+    if (haves == null || haves.isEmpty()) return Type.CLONE;
+    else return Type.UPDATE;
   }
   
   /*

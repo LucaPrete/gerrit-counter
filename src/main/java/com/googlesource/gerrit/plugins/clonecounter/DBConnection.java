@@ -25,6 +25,8 @@ import java.util.HashMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.googlesource.gerrit.plugins.clonecounter.ClientAction.Type;
+
 public class DBConnection {
   
   private static final Logger log = LoggerFactory.getLogger(DBConnection.class);
@@ -53,15 +55,15 @@ public class DBConnection {
   }
 
   // Increment the either the clones or the update counters, given an update type and a repo name
-  public void incrementCounters(String type, String repo){
+  public void incrementCounters(Type type, String repo){
     Connection con = null;
     PreparedStatement recordExists = null;
     PreparedStatement updateRecord = null;
     PreparedStatement insertRecord = null;
     
     String counterCol = null;
-    if (type == "clones") counterCol = clonesCounterCol;
-    else if (type == "updates") counterCol = updatesCounterCol;
+    if (type == Type.CLONE) counterCol = clonesCounterCol;
+    else if (type == Type.UPDATE) counterCol = updatesCounterCol;
 
     String queryRecordExists = String.format("SELECT * FROM %s WHERE %s=? AND %s=?", table, dateCol, repoCol);
     String queryUpdateRecord = String.format("UPDATE %s SET %s=? WHERE %s=? AND %s=?", table, counterCol, dateCol, repoCol);
