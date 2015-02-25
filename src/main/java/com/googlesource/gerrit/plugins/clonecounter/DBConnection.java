@@ -22,6 +22,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -127,7 +128,8 @@ public class DBConnection {
   }
 
   private java.sql.Date getTodayDate() {
-    java.util.Date date = new java.util.Date();
+    java.util.Date rawDate = new java.util.Date();
+    java.util.Date date = new DateTime(rawDate).minusHours(8).toDate();
     return new java.sql.Date(date.getTime());
   }
 }
