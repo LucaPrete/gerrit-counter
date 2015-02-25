@@ -3,7 +3,8 @@
 
 Description
 -----------
-The plugin allows to track the number of clones for one or more Gerrit repositories on a PostreSQL database.
+The plugin allows to track the number of clones, fetches and pulls operations
+for one or more Gerrit repositories on a PostreSQL database.
 
 The user can activate the plugin either for all the Gerrit repositories or for just for few of them.
 The user can also choose custom DB name and table structures.
@@ -11,10 +12,19 @@ The user can also choose custom DB name and table structures.
 Database requirements
 ---------------------
 The database needs to be a PostgreSQL database, version 9.X.
-It's required a table (see below for custom table and columns names) with three columns.
-The first column is used to track the clones dates and must be of type `date`.
-The second column is used to track the number of clones for a specific repository and it must be of type `integer`.
-The third column is used to keep track the name of the repository cloned and it must be of type `varchar`.
+It's required a table made of three or more columns, depending on what the
+user want to keep track of.
+Here is the list of the columns needed:
+- `date` (mandatory): to register the date for a certain action. The column
+must be of type date.
+- `repository` (mandatory): to keep track of the specific repository name. It
+must be of type `varchar`.
+- `clones-counter` (optional): in case the user want to keep track of the
+number of repositories clones. It must be of type `integer`.
+- `updates-counter` (optional): in case the user want to keep track of the
+number of repositories updates (fetches, pull operations). The column must be
+of type `integer`.
+
 It's strongly suggested to use as the primary key the date and the repository fields.
 
 Configuration
@@ -26,7 +36,7 @@ to parse the new configuration.
 To start the plugin configuration block create a line in `gerrit.config` like the following:
 
 ```
-[plugin "clone counter"]
+[plugin "gerrit counter"]
 ```
 
 Following parameters must be inserted below the specific plugin section in the `gerrit.config`.
@@ -125,26 +135,29 @@ The example uses all the parameters currently supported. Please, refer to the gu
 and behaviors if a parameter is not specified.
 
 ```
-[plugin "clone-counter"]
+[plugin "gerrit-counter"]
+        timzone = America/LosAngeles
         dbUrl = db.example.com
         dbPort = 5432
         dbUser = admin
         dbPass = mypass
-        dbName = clone-db
-        dbTable = clone-table
+        dbName = gerrit-counter-db
+        dbTable = counter-table
         dbDateCol = date
-        dbCounterCol = clones
+        dbClonesCounterCol = clones
+        dbUpdatesCounterCol = upadtes
         dbRepoCol = repo
 ```
 
 Default values
 --------------
 Providing a configuration it's not necessarily need. If not parameters are found, by default the application use
-the following values/behaviors.
+the following values/behaviors. Even if it's not mentioned below, by default all the repositories are tracked if
+no parameters are specified in activeRepos, and no operations are tracked if no parameters are specified under
+activeTrackers.
 
 ```
-[plugin "clone-counter"]
-	activeRepos = * (All repositories are tracked)
+[plugin "gerrit-counter"]
         dbUrl = 127.0.0.1
         dbPort = 5432
         dbUser = admin
@@ -152,6 +165,7 @@ the following values/behaviors.
         dbName = default-db
         dbTable = default-table
         dbDateCol = date
-        dbCounterCol = clones
+        dbClonesCounterCol = clones
+        dbUpdatesCounterCol = updates
         dbRepoCol = repos
 ```

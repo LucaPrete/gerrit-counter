@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package com.googlesource.gerrit.plugins.clonecounter;
+package com.googlesource.gerrit.plugins.gerritcounter;
 
 import org.eclipse.jgit.lib.Config;
 import org.eclipse.jgit.transport.PreUploadHook;
@@ -31,15 +31,15 @@ import com.google.inject.Inject;
  * The main plugin module that is responsible for binding the hook when the
  * plugin is started.
  */
-public class CloneCounterModule extends FactoryModule {
+public class GerritCounterModule extends FactoryModule {
 
-  private static final Logger log = LoggerFactory.getLogger(CloneCounterModule.class);
+  private static final Logger log = LoggerFactory.getLogger(GerritCounterModule.class);
   private final String pluginName;
 
   private final PluginConfigFactory pluginCfgFactory;
 
   @Inject
-  public CloneCounterModule(@PluginName String pluginName,
+  public GerritCounterModule(@PluginName String pluginName,
       @GerritServerConfig Config config,
       PluginConfigFactory pluginCfgFactory) {
     this.pluginName = pluginName;
@@ -53,6 +53,6 @@ public class CloneCounterModule extends FactoryModule {
     // Adding CloneCounterHook to the PreUploadHook set
     // Note: The chain of hooks is called in ReceiveFactory by Gerrit
     DynamicSet.bind(binder(), PreUploadHook.class)
-      .toInstance(new CloneCounterHook(pluginConfig));
+      .toInstance(new GerritCounterHook(pluginConfig));
   }
 }

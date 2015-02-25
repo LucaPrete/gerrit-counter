@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package com.googlesource.gerrit.plugins.clonecounter;
+package com.googlesource.gerrit.plugins.gerritcounter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -35,15 +35,15 @@ import com.google.gerrit.server.config.PluginConfig;
  *     This hook identifies git clones and records it in a Postgres database.
  * </p>
  */
-public class CloneCounterHook implements PreUploadHook {
+public class GerritCounterHook implements PreUploadHook {
     
-  private static final Logger log = LoggerFactory.getLogger(CloneCounterHook.class);
+  private static final Logger log = LoggerFactory.getLogger(GerritCounterHook.class);
   private final ArrayList<String> activeRepos;
   private final ArrayList<ClientAction.Type> activeTrackers;
   private final DBConnection db;
   private final PluginConfig pluginConfig;
 	
-  public CloneCounterHook(PluginConfig config) {
+  public GerritCounterHook(PluginConfig config) {
     this.pluginConfig = config;
     HashMap<String, String> dbConfig = new HashMap<String, String>();
     dbConfig.put("dbUrl", pluginConfig.getString("dbUrl", "127.0.0.1"));

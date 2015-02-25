@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package com.googlesource.gerrit.plugins.clonecounter;
+package com.googlesource.gerrit.plugins.gerritcounter;
 
 import java.sql.Connection;
 import java.sql.Date;
@@ -26,7 +26,7 @@ import java.util.TimeZone;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.googlesource.gerrit.plugins.clonecounter.ClientAction.Type;
+import com.googlesource.gerrit.plugins.gerritcounter.ClientAction.Type;
 
 public class DBConnection {
   
@@ -131,6 +131,7 @@ public class DBConnection {
   
   private java.sql.Date getTodayDate() {
     long now = System.currentTimeMillis();
+    log.debug("Date: {}, Timezone: {}.", new java.sql.Date(now + timezone.getOffset(now)), timezone);
     return new java.sql.Date(now + timezone.getOffset(now));
   }
 }

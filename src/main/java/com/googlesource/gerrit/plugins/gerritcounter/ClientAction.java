@@ -1,4 +1,4 @@
-package com.googlesource.gerrit.plugins.clonecounter;
+package com.googlesource.gerrit.plugins.gerritcounter;
 
 public class ClientAction {
   

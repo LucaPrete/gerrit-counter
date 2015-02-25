@@ -18,11 +18,11 @@ limitations under the License.
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>com.googlesource.gerrit.plugins.clone-counter</groupId>
-  <artifactId>clone-counter</artifactId>
+  <groupId>com.googlesource.gerrit.plugins.gerrit-counter</groupId>
+  <artifactId>gerrit-counter</artifactId>
   <packaging>jar</packaging>
   <version>v2.10</version>
-  <name>clone-counter</name>
+  <name>gerrit-counter</name>
 
   <properties>
     <Gerrit-ApiType>plugin</Gerrit-ApiType>
@@ -38,11 +38,11 @@ limitations under the License.
         <configuration>
           <archive>
             <manifestEntries>
-              <Gerrit-PluginName>clone-counter</Gerrit-PluginName>
-              <Gerrit-Module>com.googlesource.gerrit.plugins.clonecounter.CloneCounterModule</Gerrit-Module>
+              <Gerrit-PluginName>gerrit-counter</Gerrit-PluginName>
+              <Gerrit-Module>com.googlesource.gerrit.plugins.gerritcounter.GerritCounterModule</Gerrit-Module>
 
               <Implementation-Vendor>Luca Prete and Brian O'Connor</Implementation-Vendor>
-              <Implementation-URL>https://github.com/LucaPrete/gerritclonescounter</Implementation-URL>
+              <Implementation-URL>https://github.com/LucaPrete/gerritcounter</Implementation-URL>
 
               <Implementation-Title>${Gerrit-ApiType} ${project.artifactId}</Implementation-Title>
               <Implementation-Version>${project.version}</Implementation-Version>
