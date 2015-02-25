@@ -39,7 +39,7 @@ public class CloneCounterHook implements PreUploadHook {
     
   private static final Logger log = LoggerFactory.getLogger(CloneCounterHook.class);
   private final ArrayList<String> activeRepos;
-  private final ArrayList<String> activeTrackers;
+  private final ArrayList<ClientAction.Type> activeTrackers;
   private final DBConnection db;
   private final PluginConfig pluginConfig;
 	
@@ -61,10 +61,17 @@ public class CloneCounterHook implements PreUploadHook {
     this.db = new DBConnection(dbConfig);
     this.activeRepos = new ArrayList<String>(Arrays
         .asList(pluginConfig.getString("activeRepos", "").split(",")));
-    this.activeTrackers = new ArrayList<String>(Arrays
-        .asList(pluginConfig.getString("activeTrackers", "").split(",")));
+    this.activeTrackers = stringToActionType(pluginConfig.getString("activeTrackers", ""));
   }
-	
+  
+  private ArrayList<ClientAction.Type> stringToActionType(String activeTrackers) {
+    ArrayList<ClientAction.Type> clientActionTypes = new ArrayList<ClientAction.Type>();
+    for (String tracker : activeTrackers.split(",")) {
+      clientActionTypes.add(ClientAction.getActionTypeFromString(tracker));
+    }
+    return clientActionTypes;
+  }
+  
   @Override
   public void onBeginNegotiateRound(UploadPack uploadPack,
       Collection<? extends ObjectId> collection, int i)
@@ -85,13 +92,12 @@ public class CloneCounterHook implements PreUploadHook {
       Collection<? extends ObjectId> collection,
       Collection<? extends ObjectId> haves)
           throws ServiceMayNotContinueException {
-    ArrayList<String> actionsTracked = getActionsList();
     ArrayList<String> repoTracked = getTrackedRepoList();
     ClientAction.Type requiredAction = cloneOrUpdate(haves);
     String requiredRepoName = getRepoName(uploadPack);
     log.debug("Client requires a {} on repository {}.", requiredAction,
         requiredRepoName);
-    if (actionsTracked != null && actionsTracked.contains(requiredAction)) {
+    if (activeTrackers.contains(requiredAction)) {
       log.debug("Configuration requires to track the action {} just received +"
           + "for repository {}.", requiredAction, requiredRepoName);
       if (repoTracked != null && repoTracked.contains(requiredRepoName)) {
@@ -130,18 +136,6 @@ public class CloneCounterHook implements PreUploadHook {
     if (activeRepos != null && activeRepos.size()>0
         && !activeRepos.get(0).equals("")) {
       return activeRepos;
-    }
-    return null;
-  }
-  
-  /*
-   *  Returns the list of objects that the user want to be tracked (clones, updates).
-   *  Returns null if no objects to be tracked are specified.
-   */
-  private ArrayList<String> getActionsList() {
-    if (activeTrackers != null && activeTrackers.size()>0
-        && !activeTrackers.get(0).equals("")) {
-      return activeTrackers;
     }
     return null;
   }
