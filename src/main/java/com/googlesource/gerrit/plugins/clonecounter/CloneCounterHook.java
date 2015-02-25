@@ -58,6 +58,7 @@ public class CloneCounterHook implements PreUploadHook {
     dbConfig.put("dbUpdatesCounterCol", pluginConfig
         .getString("dbUpdatesCounterCol", "dbUpdatesCounterCol"));
     dbConfig.put("dbRepoCol", pluginConfig.getString("dbRepoCol", "repos"));
+    dbConfig.put("timezone", pluginConfig.getString("timezone", ""));
     this.db = new DBConnection(dbConfig);
     this.activeRepos = new ArrayList<String>(Arrays
         .asList(pluginConfig.getString("activeRepos", "").split(",")));

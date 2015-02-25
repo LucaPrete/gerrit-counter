@@ -21,8 +21,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.TimeZone;
 
-import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,6 +41,7 @@ public class DBConnection {
   private final String clonesCounterCol;
   private final String updatesCounterCol;
   private final String repoCol;
+  private final TimeZone timezone;
 
   public DBConnection(HashMap<String, String> dbConfig) {
     this.url = dbConfig.get("dbUrl");
@@ -53,6 +54,7 @@ public class DBConnection {
     this.clonesCounterCol = dbConfig.get("dbClonesCounterCol");
     this.updatesCounterCol = dbConfig.get("dbUpdatesCounterCol");
     this.repoCol = dbConfig.get("dbRepoCol");
+    this.timezone = TimeZone.getTimeZone(dbConfig.get("timezone"));
   }
 
   /*
@@ -126,10 +128,9 @@ public class DBConnection {
       }
     }
   }
-
+  
   private java.sql.Date getTodayDate() {
-    java.util.Date rawDate = new java.util.Date();
-    java.util.Date date = new DateTime(rawDate).minusHours(8).toDate();
-    return new java.sql.Date(date.getTime());
+    long now = System.currentTimeMillis();
+    return new java.sql.Date(now + timezone.getOffset(now));
   }
 }

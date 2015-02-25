@@ -35,6 +35,14 @@ To start the plugin configuration block create a line in `gerrit.config` like th
 
 Following parameters must be inserted below the specific plugin section in the `gerrit.config`.
 
+- **Timezone.**
+  Specify the timezone you want to use to save the entries in the database. The default value
+  is GMT.
+
+  ```
+  timezone = America/Los_Angeles
+  ```
+
 - **Active Trackers.**
   The parameter is mandatory. It allow you to specify what behavior a user want to monitor.
   It's a comma separated values list. For example, if you want to monitor the number of
