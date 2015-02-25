@@ -27,7 +27,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gerrit.server.config.PluginConfig;
-import com.googlesource.gerrit.plugins.clonecounter.ClientAction.Type;
 
 /**
  * CloneCounterHook is a PreUploadHook that is called before the server
@@ -60,10 +59,8 @@ public class CloneCounterHook implements PreUploadHook {
         .getString("dbUpdatesCounterCol", null));
     dbConfig.put("dbRepoCol", pluginConfig.getString("dbRepoCol", "repos"));
     this.db = new DBConnection(dbConfig);
-    
     this.activeRepos = new ArrayList<String>(Arrays
         .asList(pluginConfig.getString("activeRepos", "").split(",")));
-    
     this.activeTrackers = new ArrayList<String>(Arrays
         .asList(pluginConfig.getString("activeTrackers", "").split(",")));
   }
@@ -110,8 +107,8 @@ public class CloneCounterHook implements PreUploadHook {
    * Otherwise the client is fetching or pulling
   */
   private ClientAction.Type cloneOrUpdate(Collection<? extends ObjectId> haves) {
-    if (haves == null || haves.isEmpty()) return Type.CLONE;
-    else return Type.UPDATE;
+    if (haves == null || haves.isEmpty()) return ClientAction.Type.CLONE;
+    else return ClientAction.Type.UPDATE;
   }
   
   /*
