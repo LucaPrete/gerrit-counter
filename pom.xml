@@ -41,7 +41,7 @@ limitations under the License.
               <Gerrit-PluginName>clone-counter</Gerrit-PluginName>
               <Gerrit-Module>com.googlesource.gerrit.plugins.clonecounter.CloneCounterModule</Gerrit-Module>
 
-              <Implementation-Vendor>LucaPrete and Brian O'Connor</Implementation-Vendor>
+              <Implementation-Vendor>Luca Prete and Brian O'Connor</Implementation-Vendor>
               <Implementation-URL>https://github.com/LucaPrete/gerritclonescounter</Implementation-URL>
 
               <Implementation-Title>${Gerrit-ApiType} ${project.artifactId}</Implementation-Title>

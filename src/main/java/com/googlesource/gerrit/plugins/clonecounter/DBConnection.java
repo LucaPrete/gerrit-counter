@@ -35,7 +35,8 @@ public class DBConnection {
   private final String db;
   private final String table;
   private final String dateCol;
-  private final String counterCol;
+  private final String clonesCounterCol;
+  private final String updatesCounterCol;
   private final String repoCol;
 
   public DBConnection(HashMap<String, String> dbConfig) {
@@ -46,17 +47,22 @@ public class DBConnection {
     this.db = dbConfig.get("dbName");
     this.table = dbConfig.get("dbTable");
     this.dateCol = dbConfig.get("dbDateCol");
-    this.counterCol = dbConfig.get("dbCounterCol");
+    this.clonesCounterCol = dbConfig.get("dbClonesCounterCol");
+    this.updatesCounterCol = dbConfig.get("dbUpdatesCounterCol");
     this.repoCol = dbConfig.get("dbRepoCol");
   }
 
   // Increment the clones counter given a certain db and a certain table
-  public void incrementClonesCounter(String repo){
+  public void incrementCounters(String type, String repo){
     Connection con = null;
     PreparedStatement recordExists = null;
     PreparedStatement updateRecord = null;
     PreparedStatement insertRecord = null;
     
+    String counterCol = null;
+    if (type == "clones") counterCol = clonesCounterCol;
+    else if (type == "updates") counterCol = updatesCounterCol;
+
     String queryRecordExists = String.format("SELECT * FROM %s WHERE %s=? AND %s=?", table, dateCol, repoCol);
     String queryUpdateRecord = String.format("UPDATE %s SET %s=? WHERE %s=? AND %s=?", table, counterCol, dateCol, repoCol);
     String queryInsertRecord = String.format("INSERT INTO %s (%s, %s, %s) VALUES (?, ?, ?)", table, dateCol, counterCol, repoCol);

@@ -39,6 +39,7 @@ public class CloneCounterHook implements PreUploadHook {
     
   private static final Logger log = LoggerFactory.getLogger(CloneCounterHook.class);
   private final ArrayList<String> activeRepos;
+  private final ArrayList<String> activeTrackers;
   private final DBConnection db;
   private final PluginConfig pluginConfig;
 	
@@ -46,6 +47,8 @@ public class CloneCounterHook implements PreUploadHook {
     this.pluginConfig = config;
     this.activeRepos = new ArrayList<String>(Arrays
         .asList(pluginConfig.getString("activeRepos", "").split(",")));
+    this.activeTrackers = new ArrayList<String>(Arrays
+        .asList(pluginConfig.getString("activeTrackers", "").split(",")));
     HashMap<String, String> dbConfig = new HashMap<String, String>();
     dbConfig.put("dbUrl", pluginConfig.getString("dbUrl", "127.0.0.1"));
     dbConfig.put("dbPort", pluginConfig.getString("dbPort", "5432"));
@@ -54,7 +57,8 @@ public class CloneCounterHook implements PreUploadHook {
     dbConfig.put("dbName", pluginConfig.getString("dbName", "default-db"));
     dbConfig.put("dbTable", pluginConfig.getString("dbTable", "default-table"));
     dbConfig.put("dbDateCol", pluginConfig.getString("dbDateCol", "date"));
-    dbConfig.put("dbCounterCol", pluginConfig.getString("dbCounterCol", "clones"));
+    dbConfig.put("dbClonesCounterCol", pluginConfig.getString("dbClonesCounterCol", null));
+    dbConfig.put("dbUpdatesCounterCol", pluginConfig.getString("dbUpdatesCounterCol", null));
     dbConfig.put("dbRepoCol", pluginConfig.getString("dbRepoCol", "repos"));
     this.db = new DBConnection(dbConfig);
   }
@@ -81,24 +85,30 @@ public class CloneCounterHook implements PreUploadHook {
     String[] repoPathSplitted = uploadPack.getRepository()
         .toString().split("/");
     String repoName = repoPathSplitted[repoPathSplitted.length-1]
-        .split("\\.")[0];
+        .split("\\.")[0].toLowerCase();
     if (haves == null || haves.isEmpty()) {
       log.debug("Repository {} cloned.", repoName);
             if (activeRepos != null && activeRepos.size()>0
                 && !activeRepos.get(0).equals("")) {
-              if (activeRepos.contains(repoName)) {
-                log.debug("{} is a repository to be tracked. Incrementing counter in DB.", repoName);
-                incrementCount(repoName);
+              if (activeRepos.contains(repoName) && activeTrackers.contains("clones")) {
+                log.debug("{} is a repository to be tracked. Incrementing clones counter in DB.", repoName);
+                db.incrementCounters("clones", repoName);
               }
             } else {
-              log.debug("{} is a repository to be tracked. Incrementing counter in DB.", repoName);
-              incrementCount(repoName);
+              log.debug("{} is a repository to be tracked. Incrementing clones counter in DB.", repoName);
+              db.incrementCounters("clones", repoName);
             }
+    } else {
+      if (activeRepos != null && activeRepos.size()>0
+          && !activeRepos.get(0).equals("")) {
+        if (activeRepos.contains(repoName) && activeTrackers.contains("updates")) {
+          log.debug("{} is a repository to be tracked. Incrementing updates counter in DB.", repoName);
+          db.incrementCounters("updates", repoName);
+        } else {
+          log.debug("{} is a repository to be tracked. Incrementing updates counter in DB.", repoName);
+          db.incrementCounters("updates", repoName);
+        }
+      }
     }
-  }
-
-  private void incrementCount(String repo) {
-    log.debug("Incrementing for repo {}", repo);
-    db.incrementClonesCounter(repo);
   }
 }
