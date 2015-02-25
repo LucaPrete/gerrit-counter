@@ -41,6 +41,10 @@ Following parameters must be inserted below the specific plugin section in the `
   clones repositories specify clone, if you want to monitor also the number of fetches and pulls
   specify update. You can also specify both, as in the example below.
 
+  ```
+  activeTrackers = clone,update
+  ```
+
 - **Active Repos.**
   The user can specifiy a list of repository to be tracked. If no repositories are specified, by default all the repositories will be tracked. Please, provide a comma separated value of repository names. For example,
 
