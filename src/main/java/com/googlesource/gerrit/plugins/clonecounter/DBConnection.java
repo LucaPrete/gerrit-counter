@@ -54,7 +54,10 @@ public class DBConnection {
     this.repoCol = dbConfig.get("dbRepoCol");
   }
 
-  // Increment the either the clones or the update counters, given an update type and a repo name
+  /*
+   * Increment the either the clones or the update counters, given an update
+   * type and a repo name
+   */
   public void incrementCounters(Type type, String repo){
     Connection con = null;
     PreparedStatement recordExists = null;
@@ -65,14 +68,18 @@ public class DBConnection {
     if (type == Type.CLONE) counterCol = clonesCounterCol;
     else if (type == Type.UPDATE) counterCol = updatesCounterCol;
 
-    String queryRecordExists = String.format("SELECT * FROM %s WHERE %s=? AND %s=?", table, dateCol, repoCol);
-    String queryUpdateRecord = String.format("UPDATE %s SET %s=? WHERE %s=? AND %s=?", table, counterCol, dateCol, repoCol);
-    String queryInsertRecord = String.format("INSERT INTO %s (%s, %s, %s) VALUES (?, ?, ?)", table, dateCol, counterCol, repoCol);
+    String queryRecordExists = String.format("SELECT * FROM %s WHERE %s=? "
+        + "AND %s=?", table, dateCol, repoCol);
+    String queryUpdateRecord = String.format("UPDATE %s SET %s=? WHERE %s=? "
+        + "AND %s=?", table, counterCol, dateCol, repoCol);
+    String queryInsertRecord = String.format("INSERT INTO %s (%s, %s, %s) "
+        + "VALUES (?, ?, ?)", table, dateCol, counterCol, repoCol);
     
     ResultSet rs = null;
 
     try {
-      con = DriverManager.getConnection(String.format("jdbc:postgresql://%s:%s/%s", url, port, db), user, pass);
+      con = DriverManager.getConnection(String.format("jdbc:postgresql://%s:%s/%s",
+          url, port, db), user, pass);
       con.setAutoCommit(true);
       recordExists = con.prepareStatement(queryRecordExists);
       recordExists.setDate(1, getTodayDate());
