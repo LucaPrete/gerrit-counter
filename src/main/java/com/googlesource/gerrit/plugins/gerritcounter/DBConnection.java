@@ -68,15 +68,23 @@ public class DBConnection {
     PreparedStatement insertRecord = null;
     
     String counterCol = null;
-    if (type == Type.CLONE) counterCol = clonesCounterCol;
-    else if (type == Type.UPDATE) counterCol = updatesCounterCol;
+    String zeroCol = null;
+    
+    if (type == Type.CLONE) {
+    	counterCol = clonesCounterCol;
+    	zeroCol = updatesCounterCol;
+    }
+    else if (type == Type.UPDATE) {
+    	counterCol = updatesCounterCol;
+    	zeroCol = clonesCounterCol;
+    }
 
     String queryRecordExists = String.format("SELECT %s,%s,%s FROM %s WHERE %s=? "
         + "AND %s=?", dateCol, counterCol, repoCol, table, dateCol, repoCol);
     String queryUpdateRecord = String.format("UPDATE %s SET %s=? WHERE %s=? "
         + "AND %s=?", table, counterCol, dateCol, repoCol);
-    String queryInsertRecord = String.format("INSERT INTO %s (%s, %s, %s) "
-        + "VALUES (?, ?, ?)", table, dateCol, counterCol, repoCol);
+    String queryInsertRecord = String.format("INSERT INTO %s (%s, %s, %s, %s) "
+        + "VALUES (?, ?, ?, ?)", table, dateCol, counterCol, zeroCol, repoCol);
     
     ResultSet rs = null;
 
@@ -101,6 +109,7 @@ public class DBConnection {
         insertRecord = con.prepareStatement(queryInsertRecord);
         insertRecord.setDate(1, getTodayDate());
         insertRecord.setInt(2, 1);
+        insertRecord.setInt(3, 0);
         insertRecord.setString(3, repo);
         insertRecord.execute();
       }
