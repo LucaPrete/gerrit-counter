@@ -110,7 +110,7 @@ public class DBConnection {
         insertRecord.setDate(1, getTodayDate());
         insertRecord.setInt(2, 1);
         insertRecord.setInt(3, 0);
-        insertRecord.setString(3, repo);
+        insertRecord.setString(4, repo);
         insertRecord.execute();
       }
     } catch (SQLException ex) {
