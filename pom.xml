@@ -21,12 +21,12 @@ limitations under the License.
   <groupId>com.googlesource.gerrit.plugins.gerrit-counter</groupId>
   <artifactId>gerrit-counter</artifactId>
   <packaging>jar</packaging>
-  <version>v2.13.3</version>
+  <version>v2.13.7</version>
   <name>gerrit-counter</name>
 
   <properties>
     <Gerrit-ApiType>plugin</Gerrit-ApiType>
-    <Gerrit-ApiVersion>2.13.3</Gerrit-ApiVersion>
+    <Gerrit-ApiVersion>2.13.7</Gerrit-ApiVersion>
   </properties>
 
   <build>
